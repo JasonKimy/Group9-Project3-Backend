@@ -1,0 +1,30 @@
+package com.example.restservice;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.web.SecurityFilterChain;
+
+@Configuration
+public class SecurityConfig {
+
+  @Bean
+  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    http
+      .csrf(csrf -> csrf.disable())
+      .authorizeHttpRequests(auth -> auth
+        .requestMatchers("/public/**", "/actuator/**", "/dev/callback").permitAll()
+        .anyRequest().permitAll()
+      )
+
+      .oauth2Login(oauth -> oauth
+        .successHandler((req, res, auth) -> {
+          String code = req.getParameter("code");
+          String state = req.getParameter("state");
+          res.sendRedirect("http://localhost:8080/dev/callback?code=" + code + "&state=" + state);
+        })
+      );
+
+    return http.build();
+  }
+}
