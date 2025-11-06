@@ -27,11 +27,17 @@ test {
 }
 
 // Heroku expects the build task to create an executable jar
-tasks.named('bootJar') {
+bootJar {
 	archiveFileName = 'app.jar'
+	archiveClassifier = ''
 }
 
-// Heroku looks for this 'stage' task
+// Disable plain jar creation, we only want the boot jar
+jar {
+	enabled = false
+}
+
+// Heroku looks for this 'stage' task to build the application
 task stage {
-	dependsOn build
+	dependsOn clean, bootJar
 }
