@@ -39,5 +39,5 @@ jar {
 
 // Heroku looks for this 'stage' task to build the application
 task stage {
-	dependsOn clean, bootJar
+	dependsOn bootJar
 }
