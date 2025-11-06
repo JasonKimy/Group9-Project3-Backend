@@ -12,7 +12,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
+//@Component
 public class DataSeeder implements CommandLineRunner {
     
     @Autowired
