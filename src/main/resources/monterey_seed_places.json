@@ -1,0 +1,397 @@
+{
+  "metadata": {
+    "region": "Monterey County, CA (sample)",
+    "generated_at": "2025-11-06",
+    "schema_version": "1.0.0",
+    "note": "Illustrative dataset for academic seeding; coordinates and details are approximate."
+  },
+  "places": [
+    {
+      "id": "captain-stoker-monterey",
+      "name": "Captain + Stoker",
+      "category": "coffee_shop",
+      "subcategory": "cafe",
+      "lat": 36.6027,
+      "lon": -121.8968,
+      "city": "Monterey",
+      "county": "Monterey County",
+      "state": "CA",
+      "tags": [
+        "coffee",
+        "pastries",
+        "wifi"
+      ],
+      "description": "Specialty coffee roaster and cafe near downtown Monterey.",
+      "sources": [
+        "manual-seed"
+      ]
+    },
+    {
+      "id": "bright-coffee-monterey",
+      "name": "Bright Coffee",
+      "category": "coffee_shop",
+      "subcategory": "cafe",
+      "lat": 36.5997,
+      "lon": -121.8955,
+      "city": "Monterey",
+      "county": "Monterey County",
+      "state": "CA",
+      "tags": [
+        "coffee",
+        "light-bites"
+      ],
+      "description": "Small coffee spot in downtown Monterey.",
+      "sources": [
+        "manual-seed"
+      ]
+    },
+    {
+      "id": "cvcrc-carmel",
+      "name": "Carmel Valley Coffee Roasting Co.",
+      "category": "coffee_shop",
+      "subcategory": "cafe",
+      "lat": 36.5552,
+      "lon": -121.9233,
+      "city": "Carmel-by-the-Sea",
+      "county": "Monterey County",
+      "state": "CA",
+      "tags": [
+        "coffee",
+        "local-chain"
+      ],
+      "description": "Local roaster with a cozy cafe right off Ocean Ave.",
+      "sources": [
+        "manual-seed"
+      ]
+    },
+    {
+      "id": "acme-coffee-seaside",
+      "name": "Acme Coffee Roasting Co.",
+      "category": "coffee_shop",
+      "subcategory": "roastery",
+      "lat": 36.614,
+      "lon": -121.851,
+      "city": "Seaside",
+      "county": "Monterey County",
+      "state": "CA",
+      "tags": [
+        "coffee",
+        "roastery"
+      ],
+      "description": "Local roastery and cafe in Seaside.",
+      "sources": [
+        "manual-seed"
+      ]
+    },
+    {
+      "id": "monterey-sports-center",
+      "name": "Monterey Sports Center",
+      "category": "gym",
+      "subcategory": "community",
+      "lat": 36.6017,
+      "lon": -121.892,
+      "city": "Monterey",
+      "county": "Monterey County",
+      "state": "CA",
+      "tags": [
+        "gym",
+        "pool",
+        "fitness-classes"
+      ],
+      "description": "Large community fitness center with pool and classes.",
+      "sources": [
+        "manual-seed"
+      ]
+    },
+    {
+      "id": "planet-fitness-salinas",
+      "name": "Planet Fitness (Salinas)",
+      "category": "gym",
+      "subcategory": "commercial",
+      "lat": 36.674,
+      "lon": -121.655,
+      "city": "Salinas",
+      "county": "Monterey County",
+      "state": "CA",
+      "tags": [
+        "gym",
+        "24-hours"
+      ],
+      "description": "Affordable gym option in Salinas.",
+      "sources": [
+        "manual-seed"
+      ]
+    },
+    {
+      "id": "anytime-fitness-marina",
+      "name": "Anytime Fitness (Marina)",
+      "category": "gym",
+      "subcategory": "commercial",
+      "lat": 36.684,
+      "lon": -121.802,
+      "city": "Marina",
+      "county": "Monterey County",
+      "state": "CA",
+      "tags": [
+        "gym",
+        "24-7"
+      ],
+      "description": "Neighborhood 24/7 fitness club in Marina.",
+      "sources": [
+        "manual-seed"
+      ]
+    },
+    {
+      "id": "in-shape-salinas",
+      "name": "In-Shape (Salinas)",
+      "category": "gym",
+      "subcategory": "commercial",
+      "lat": 36.709,
+      "lon": -121.654,
+      "city": "Salinas",
+      "county": "Monterey County",
+      "state": "CA",
+      "tags": [
+        "gym",
+        "classes",
+        "pool"
+      ],
+      "description": "Full-service gym with amenities in north Salinas.",
+      "sources": [
+        "manual-seed"
+      ]
+    },
+    {
+      "id": "lovers-point-pacific-grove",
+      "name": "Lovers Point Park",
+      "category": "park",
+      "subcategory": "urban_park",
+      "lat": 36.626,
+      "lon": -121.916,
+      "city": "Pacific Grove",
+      "county": "Monterey County",
+      "state": "CA",
+      "tags": [
+        "coast",
+        "picnic",
+        "views"
+      ],
+      "description": "Scenic park on the coast with lawns and rocky shoreline.",
+      "sources": [
+        "manual-seed"
+      ]
+    },
+    {
+      "id": "jacks-peak-park",
+      "name": "Jacks Peak County Park",
+      "category": "park",
+      "subcategory": "regional_park",
+      "lat": 36.557,
+      "lon": -121.86,
+      "city": "Monterey",
+      "county": "Monterey County",
+      "state": "CA",
+      "tags": [
+        "hiking",
+        "views"
+      ],
+      "description": "Forest park above Monterey with trails and bay overlooks.",
+      "sources": [
+        "manual-seed"
+      ]
+    },
+    {
+      "id": "toro-park-salinas",
+      "name": "Toro County Park",
+      "category": "park",
+      "subcategory": "regional_park",
+      "lat": 36.61,
+      "lon": -121.64,
+      "city": "Salinas",
+      "county": "Monterey County",
+      "state": "CA",
+      "tags": [
+        "hiking",
+        "picnic"
+      ],
+      "description": "Large foothill park popular for hiking and mountain biking.",
+      "sources": [
+        "manual-seed"
+      ]
+    },
+    {
+      "id": "garland-ranch-carmel-valley",
+      "name": "Garland Ranch Regional Park",
+      "category": "park",
+      "subcategory": "regional_park",
+      "lat": 36.523,
+      "lon": -121.844,
+      "city": "Carmel Valley",
+      "county": "Monterey County",
+      "state": "CA",
+      "tags": [
+        "hiking",
+        "dog-friendly"
+      ],
+      "description": "Valley park with oak woodlands, river access, and ridge trails.",
+      "sources": [
+        "manual-seed"
+      ]
+    },
+    {
+      "id": "point-lobos",
+      "name": "Point Lobos State Natural Reserve",
+      "category": "park",
+      "subcategory": "state_reserve",
+      "lat": 36.521,
+      "lon": -121.94,
+      "city": "Carmel",
+      "county": "Monterey County",
+      "state": "CA",
+      "tags": [
+        "coast",
+        "wildlife",
+        "hiking"
+      ],
+      "description": "World-class coastal reserve with coves and cypress groves.",
+      "sources": [
+        "manual-seed"
+      ]
+    },
+    {
+      "id": "garrapata-state-park",
+      "name": "Garrapata State Park",
+      "category": "park",
+      "subcategory": "state_park",
+      "lat": 36.44,
+      "lon": -121.91,
+      "city": "Big Sur",
+      "county": "Monterey County",
+      "state": "CA",
+      "tags": [
+        "coast",
+        "hiking"
+      ],
+      "description": "Dramatic coastal bluffs and canyons south of Carmel.",
+      "sources": [
+        "manual-seed"
+      ]
+    },
+    {
+      "id": "marina-state-beach",
+      "name": "Marina State Beach",
+      "category": "beach",
+      "subcategory": "state_beach",
+      "lat": 36.692,
+      "lon": -121.809,
+      "city": "Marina",
+      "county": "Monterey County",
+      "state": "CA",
+      "tags": [
+        "beach",
+        "hang-gliding"
+      ],
+      "description": "Wide sandy beach with dunes and frequent wind.",
+      "sources": [
+        "manual-seed"
+      ]
+    },
+    {
+      "id": "del-monte-beach-monterey",
+      "name": "Del Monte Beach",
+      "category": "beach",
+      "subcategory": "city_beach",
+      "lat": 36.61,
+      "lon": -121.86,
+      "city": "Monterey",
+      "county": "Monterey County",
+      "state": "CA",
+      "tags": [
+        "beach",
+        "walking"
+      ],
+      "description": "Local sandy beach with boardwalk and dunes.",
+      "sources": [
+        "manual-seed"
+      ]
+    },
+    {
+      "id": "carmel-beach",
+      "name": "Carmel Beach",
+      "category": "beach",
+      "subcategory": "city_beach",
+      "lat": 36.551,
+      "lon": -121.929,
+      "city": "Carmel-by-the-Sea",
+      "county": "Monterey County",
+      "state": "CA",
+      "tags": [
+        "beach",
+        "sunset",
+        "dogs"
+      ],
+      "description": "Iconic white-sand beach at the end of Ocean Ave.",
+      "sources": [
+        "manual-seed"
+      ]
+    },
+    {
+      "id": "soberanes-canyon-trail",
+      "name": "Soberanes Canyon Trail",
+      "category": "trail",
+      "subcategory": "hiking",
+      "lat": 36.443,
+      "lon": -121.905,
+      "city": "Big Sur",
+      "county": "Monterey County",
+      "state": "CA",
+      "tags": [
+        "loop",
+        "redwoods",
+        "steep"
+      ],
+      "description": "Popular canyon-and-ridge loop in Garrapata State Park.",
+      "sources": [
+        "manual-seed"
+      ]
+    },
+    {
+      "id": "jacks-peak-skyline-trail",
+      "name": "Skyline Trail (Jacks Peak)",
+      "category": "trail",
+      "subcategory": "hiking",
+      "lat": 36.559,
+      "lon": -121.859,
+      "city": "Monterey",
+      "county": "Monterey County",
+      "state": "CA",
+      "tags": [
+        "forest",
+        "views"
+      ],
+      "description": "Ridgetop trail with views of Monterey Bay and Carmel Valley.",
+      "sources": [
+        "manual-seed"
+      ]
+    },
+    {
+      "id": "fort-ord-creekside-terrace",
+      "name": "Fort Ord Trail: Creekside Terrace",
+      "category": "trail",
+      "subcategory": "multiuse",
+      "lat": 36.634,
+      "lon": -121.79,
+      "city": "Seaside",
+      "county": "Monterey County",
+      "state": "CA",
+      "tags": [
+        "hiking",
+        "mtb"
+      ],
+      "description": "Multiuse trail through Fort Ord National Monument grasslands.",
+      "sources": [
+        "manual-seed"
+      ]
+    }
+  ]
+}
