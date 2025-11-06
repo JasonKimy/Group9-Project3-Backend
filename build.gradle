@@ -30,3 +30,8 @@ test {
 tasks.named('bootJar') {
 	archiveFileName = 'app.jar'
 }
+
+// Heroku looks for this 'stage' task
+task stage {
+	dependsOn build
+}
