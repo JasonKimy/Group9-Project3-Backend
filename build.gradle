@@ -16,10 +16,28 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
   	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	runtimeOnly 'org.postgresql:postgresql'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 test {
 	useJUnitPlatform()
+}
+
+// Heroku expects the build task to create an executable jar
+bootJar {
+	archiveFileName = 'app.jar'
+	archiveClassifier = ''
+}
+
+// Disable plain jar creation, we only want the boot jar
+jar {
+	enabled = false
+}
+
+// Heroku looks for this 'stage' task to build the application
+task stage {
+	dependsOn bootJar
 }
