@@ -25,3 +25,8 @@ dependencies {
 test {
 	useJUnitPlatform()
 }
+
+// Heroku expects the build task to create an executable jar
+tasks.named('bootJar') {
+	archiveFileName = 'app.jar'
+}
