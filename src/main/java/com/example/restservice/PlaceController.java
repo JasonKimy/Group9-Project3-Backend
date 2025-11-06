@@ -13,14 +13,14 @@ import java.util.stream.Collectors;
 public class PlaceController {
     
     @Autowired
-    private PlaceRepository placeRepository;
+    private SupabaseService supabaseService;
     
     /**
      * Get all places
      */
     @GetMapping
     public ResponseEntity<List<PlaceDTO>> getAllPlaces() {
-        List<Place> places = placeRepository.findAll();
+        List<Place> places = supabaseService.findAll();
         List<PlaceDTO> placeDTOs = places.stream()
                 .map(PlaceDTO::new)
                 .collect(Collectors.toList());
@@ -32,7 +32,7 @@ public class PlaceController {
      */
     @GetMapping("/{id}")
     public ResponseEntity<PlaceDTO> getPlaceById(@PathVariable String id) {
-        return placeRepository.findById(id)
+        return supabaseService.findById(id)
                 .map(place -> ResponseEntity.ok(new PlaceDTO(place)))
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -42,7 +42,7 @@ public class PlaceController {
      */
     @GetMapping("/category/{category}")
     public ResponseEntity<List<PlaceDTO>> getPlacesByCategory(@PathVariable String category) {
-        List<Place> places = placeRepository.findByCategory(category);
+        List<Place> places = supabaseService.findByCategory(category);
         List<PlaceDTO> placeDTOs = places.stream()
                 .map(PlaceDTO::new)
                 .collect(Collectors.toList());
@@ -54,7 +54,7 @@ public class PlaceController {
      */
     @GetMapping("/city/{city}")
     public ResponseEntity<List<PlaceDTO>> getPlacesByCity(@PathVariable String city) {
-        List<Place> places = placeRepository.findByCity(city);
+        List<Place> places = supabaseService.findByCity(city);
         List<PlaceDTO> placeDTOs = places.stream()
                 .map(PlaceDTO::new)
                 .collect(Collectors.toList());
@@ -66,7 +66,7 @@ public class PlaceController {
      */
     @GetMapping("/subcategory/{subcategory}")
     public ResponseEntity<List<PlaceDTO>> getPlacesBySubcategory(@PathVariable String subcategory) {
-        List<Place> places = placeRepository.findBySubcategory(subcategory);
+        List<Place> places = supabaseService.findBySubcategory(subcategory);
         List<PlaceDTO> placeDTOs = places.stream()
                 .map(PlaceDTO::new)
                 .collect(Collectors.toList());
@@ -78,7 +78,7 @@ public class PlaceController {
      */
     @GetMapping("/search")
     public ResponseEntity<List<PlaceDTO>> searchPlacesByName(@RequestParam String name) {
-        List<Place> places = placeRepository.findByNameContainingIgnoreCase(name);
+        List<Place> places = supabaseService.findByNameContaining(name);
         List<PlaceDTO> placeDTOs = places.stream()
                 .map(PlaceDTO::new)
                 .collect(Collectors.toList());
@@ -90,7 +90,7 @@ public class PlaceController {
      */
     @GetMapping("/search/description")
     public ResponseEntity<List<PlaceDTO>> searchPlacesByDescription(@RequestParam String keyword) {
-        List<Place> places = placeRepository.searchByDescription(keyword);
+        List<Place> places = supabaseService.searchByDescription(keyword);
         List<PlaceDTO> placeDTOs = places.stream()
                 .map(PlaceDTO::new)
                 .collect(Collectors.toList());
@@ -106,7 +106,7 @@ public class PlaceController {
             @RequestParam Double maxLat,
             @RequestParam Double minLon,
             @RequestParam Double maxLon) {
-        List<Place> places = placeRepository.findPlacesInBoundingBox(minLat, maxLat, minLon, maxLon);
+        List<Place> places = supabaseService.findPlacesInBoundingBox(minLat, maxLat, minLon, maxLon);
         List<PlaceDTO> placeDTOs = places.stream()
                 .map(PlaceDTO::new)
                 .collect(Collectors.toList());
@@ -123,13 +123,13 @@ public class PlaceController {
         List<Place> places;
         
         if (category != null && city != null) {
-            places = placeRepository.findByCategoryAndCity(category, city);
+            places = supabaseService.findByCategoryAndCity(category, city);
         } else if (category != null) {
-            places = placeRepository.findByCategory(category);
+            places = supabaseService.findByCategory(category);
         } else if (city != null) {
-            places = placeRepository.findByCity(city);
+            places = supabaseService.findByCity(city);
         } else {
-            places = placeRepository.findAll();
+            places = supabaseService.findAll();
         }
         
         List<PlaceDTO> placeDTOs = places.stream()
@@ -143,7 +143,7 @@ public class PlaceController {
      */
     @GetMapping("/categories")
     public ResponseEntity<List<String>> getAllCategories() {
-        List<String> categories = placeRepository.findAllCategories();
+        List<String> categories = supabaseService.findAllCategories();
         return ResponseEntity.ok(categories);
     }
     
@@ -152,7 +152,7 @@ public class PlaceController {
      */
     @GetMapping("/cities")
     public ResponseEntity<List<String>> getAllCities() {
-        List<String> cities = placeRepository.findAllCities();
+        List<String> cities = supabaseService.findAllCities();
         return ResponseEntity.ok(cities);
     }
     
@@ -161,7 +161,7 @@ public class PlaceController {
      */
     @GetMapping("/count")
     public ResponseEntity<Long> getPlaceCount() {
-        long count = placeRepository.count();
+        long count = supabaseService.count();
         return ResponseEntity.ok(count);
     }
 }

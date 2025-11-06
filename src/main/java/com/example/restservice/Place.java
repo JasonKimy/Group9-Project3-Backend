@@ -1,47 +1,22 @@
 package com.example.restservice;
 
-import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@Table(name = "places")
 public class Place {
     
-    @Id
     private String id;
-    
-    @Column(nullable = false)
     private String name;
-    
-    @Column(nullable = false)
     private String category;
-    
     private String subcategory;
-    
-    @Column(nullable = false)
     private Double lat;
-    
-    @Column(nullable = false)
     private Double lon;
-    
     private String city;
-    
     private String county;
-    
     private String state;
-    
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "place_tags", joinColumns = @JoinColumn(name = "place_id"))
-    @Column(name = "tag")
     private List<String> tags = new ArrayList<>();
-    
-    @Column(length = 1000)
     private String description;
-    
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "place_sources", joinColumns = @JoinColumn(name = "place_id"))
-    @Column(name = "source")
     private List<String> sources = new ArrayList<>();
     
     // Default constructor

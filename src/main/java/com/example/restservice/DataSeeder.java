@@ -16,12 +16,12 @@ import java.util.List;
 public class DataSeeder implements CommandLineRunner {
     
     @Autowired
-    private PlaceRepository placeRepository;
+    private SupabaseService supabaseService;
     
     @Override
     public void run(String... args) throws Exception {
         // Only seed if database is empty
-        if (placeRepository.count() == 0) {
+        if (supabaseService.count() == 0) {
             seedPlaces();
         } else {
             System.out.println("Database already contains places. Skipping seed.");
@@ -112,9 +112,9 @@ public class DataSeeder implements CommandLineRunner {
                 places.add(place);
             }
             
-            // Save all places to database
-            placeRepository.saveAll(places);
-            System.out.println("Successfully seeded " + places.size() + " places into the database!");
+            // Save all places to Supabase
+            supabaseService.saveAll(places);
+            System.out.println("Successfully seeded " + places.size() + " places into Supabase!");
             
         } catch (Exception e) {
             System.err.println("Error seeding database: " + e.getMessage());
