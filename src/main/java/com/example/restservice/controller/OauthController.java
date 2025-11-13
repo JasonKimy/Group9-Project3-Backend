@@ -142,4 +142,95 @@ public class OauthController {
       return error;
     }
   }
+
+  @PostMapping("/google/exchange")
+  public Map<String, Object> exchangeGoogleCode(@RequestBody Map<String, String> request) {
+    String code = request.get("code");
+    
+    if (code == null || code.isEmpty()) {
+      Map<String, Object> error = new HashMap<>();
+      error.put("success", false);
+      error.put("error", "Code is required");
+      return error;
+    }
+    
+    try {
+      ClientRegistration google = clientRegistrationRepository.findByRegistrationId("google");
+      String clientId = google.getClientId();
+      String clientSecret = google.getClientSecret();
+      
+      RestTemplate restTemplate = new RestTemplate();
+      HttpHeaders tokenHeaders = new HttpHeaders();
+      tokenHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+      
+      String tokenRequestBody = String.format(
+        "code=%s&client_id=%s&client_secret=%s&redirect_uri=http://localhost:8080/dev/callback&grant_type=authorization_code",
+        code, clientId, clientSecret
+      );
+      
+      HttpEntity<String> tokenEntity = new HttpEntity<>(tokenRequestBody, tokenHeaders);
+      
+      ResponseEntity<Map> tokenResponse = restTemplate.exchange(
+        "https://oauth2.googleapis.com/token",
+        HttpMethod.POST,
+        tokenEntity,
+        Map.class
+      );
+      
+      Map<String, Object> tokenBody = tokenResponse.getBody();
+      if (tokenBody == null || !tokenBody.containsKey("access_token")) {
+        Map<String, Object> error = new HashMap<>();
+        error.put("success", false);
+        error.put("error", "Failed to get access token from Google");
+        error.put("details", tokenBody);
+        return error;
+      }
+      
+      String accessToken = (String) tokenBody.get("access_token");
+      
+      HttpHeaders userHeaders = new HttpHeaders();
+      userHeaders.setBearerAuth(accessToken);
+      HttpEntity<String> userEntity = new HttpEntity<>(userHeaders);
+      
+      ResponseEntity<Map> userResponse = restTemplate.exchange(
+        "https://www.googleapis.com/oauth2/v2/userinfo",
+        HttpMethod.GET,
+        userEntity,
+        Map.class
+      );
+      
+      Map<String, Object> userData = userResponse.getBody();
+      
+      if (userData == null) {
+        Map<String, Object> error = new HashMap<>();
+        error.put("success", false);
+        error.put("error", "Failed to get user info from Google");
+        return error;
+      }
+      
+      String email = (String) userData.get("email");
+      String name = (String) userData.get("name");
+      String googleId = (String) userData.get("id");
+      String picture = (String) userData.get("picture");
+      
+      Map<String, Object> response = new HashMap<>();
+      response.put("success", true);
+      response.put("email", email);
+      response.put("googleUsername", email);
+      response.put("name", name);
+      response.put("avatarUrl", picture);
+      response.put("googleId", googleId);
+      
+      System.out.println("Mobile OAuth (Google) - User email: " + email);
+      
+      return response;
+      
+    } catch (Exception e) {
+      Map<String, Object> error = new HashMap<>();
+      error.put("success", false);
+      error.put("error", "Failed to exchange code: " + e.getMessage());
+      e.printStackTrace();
+      return error;
+    }
+  }
 }
