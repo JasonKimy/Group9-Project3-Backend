@@ -146,6 +146,16 @@ public class OauthController {
   @PostMapping("/google/exchange")
   public Map<String, Object> exchangeGoogleCode(@RequestBody Map<String, String> request) {
     String code = request.get("code");
+    String redirectUri = request.get("redirectUri");
+    String platform = request.get("platform");
+    
+    if (redirectUri == null || redirectUri.isEmpty()) {
+      redirectUri = "http://localhost:8080/dev/callback";
+    }
+    
+    if (platform == null || platform.isEmpty()) {
+      platform = "web";
+    }
     
     if (code == null || code.isEmpty()) {
       Map<String, Object> error = new HashMap<>();
@@ -155,7 +165,21 @@ public class OauthController {
     }
     
     try {
-      ClientRegistration google = clientRegistrationRepository.findByRegistrationId("google");
+      String registrationId;
+      switch (platform.toLowerCase()) {
+        case "ios":
+          registrationId = "google-ios";
+          break;
+        case "android":
+          registrationId = "google-android";
+          break;
+        case "web":
+        default:
+          registrationId = "google-web";
+          break;
+      }
+      
+      ClientRegistration google = clientRegistrationRepository.findByRegistrationId(registrationId);
       String clientId = google.getClientId();
       String clientSecret = google.getClientSecret();
       
@@ -163,10 +187,18 @@ public class OauthController {
       HttpHeaders tokenHeaders = new HttpHeaders();
       tokenHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
       
-      String tokenRequestBody = String.format(
-        "code=%s&client_id=%s&client_secret=%s&redirect_uri=http://localhost:8080/dev/callback&grant_type=authorization_code",
-        code, clientId, clientSecret
-      );
+      String tokenRequestBody;
+      if (clientSecret != null && !clientSecret.isEmpty()) {
+        tokenRequestBody = String.format(
+          "code=%s&client_id=%s&client_secret=%s&redirect_uri=%s&grant_type=authorization_code",
+          code, clientId, clientSecret, redirectUri
+        );
+      } else {
+        tokenRequestBody = String.format(
+          "code=%s&client_id=%s&redirect_uri=%s&grant_type=authorization_code",
+          code, clientId, redirectUri
+        );
+      }
       
       HttpEntity<String> tokenEntity = new HttpEntity<>(tokenRequestBody, tokenHeaders);
       
@@ -221,7 +253,7 @@ public class OauthController {
       response.put("avatarUrl", picture);
       response.put("googleId", googleId);
       
-      System.out.println("Mobile OAuth (Google) - User email: " + email);
+      System.out.println("Mobile OAuth (Google " + platform + ") - User email: " + email);
       
       return response;
       
