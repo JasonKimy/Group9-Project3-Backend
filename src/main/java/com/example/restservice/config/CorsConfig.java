@@ -23,7 +23,8 @@ public class CorsConfig {
         config.setAllowedOrigins(Arrays.asList(
             "http://localhost:8081",
             "http://localhost:19006",
-            "http://localhost:3000"
+            "http://localhost:3000",
+            "https://wander-frontend-6639fe0b4403.herokuapp.com"
         ));
         
         config.addAllowedHeader("*");
