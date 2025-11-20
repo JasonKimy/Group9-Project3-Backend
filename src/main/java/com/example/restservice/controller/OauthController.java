@@ -27,6 +27,11 @@ public class OauthController {
   @PostMapping("/github/exchange")
   public Map<String, Object> exchangeGitHubCode(@RequestBody Map<String, String> request) {
     String code = request.get("code");
+    String platform = request.get("platform");
+
+    if (platform == null || platform.isEmpty()) {
+      platform = "mobile";
+    }
     
     if (code == null || code.isEmpty()) {
       Map<String, Object> error = new HashMap<>();
@@ -36,7 +41,9 @@ public class OauthController {
     }
     
     try {
-      ClientRegistration github = clientRegistrationRepository.findByRegistrationId("github");
+      String registrationId = platform.equals("web") ? "github-web" : "github-mobile";
+
+      ClientRegistration github = clientRegistrationRepository.findByRegistrationId(registrationId);
       String clientId = github.getClientId();
       String clientSecret = github.getClientSecret();
       
@@ -150,7 +157,7 @@ public class OauthController {
     String platform = request.get("platform");
     
     if (redirectUri == null || redirectUri.isEmpty()) {
-      redirectUri = "http://localhost:8080/dev/callback";
+      redirectUri = "http://localhost:8081";
     }
     
     if (platform == null || platform.isEmpty()) {
