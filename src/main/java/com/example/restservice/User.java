@@ -1,5 +1,6 @@
 package com.example.restservice;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.Instant;
 
 public class User {
@@ -7,7 +8,11 @@ public class User {
     private String username;
     private String password;
     private String email;
+    
+    @JsonProperty("created_at")
     private Instant createdAt;
+    
+    @JsonProperty("updated_at")
     private Instant updatedAt;
 
     public User() {}

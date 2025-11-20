@@ -159,6 +159,7 @@ public class UserService {
 
         try {
             String json = objectMapper.writeValueAsString(user);
+            System.out.println("DEBUG: Sending JSON to Supabase: " + json);
             HttpEntity<String> entity = new HttpEntity<>(json, createHeaders());
 
             ResponseEntity<String> response = restTemplate.exchange(
