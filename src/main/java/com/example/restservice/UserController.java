@@ -126,4 +126,93 @@ public class UserController {
         boolean exists = userService.emailExists(email);
         return ResponseEntity.ok(exists);
     }
+
+    /**
+     * Get user's favorite challenges
+     * GET /api/users/{id}/favorites
+     */
+    @GetMapping("/{id}/favorites")
+    public ResponseEntity<FavoriteChallengesDTO> getFavoriteChallenges(@PathVariable String id) {
+        Optional<User> user = userService.findById(id);
+        if (user.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        
+        FavoriteChallengesDTO dto = new FavoriteChallengesDTO(
+            user.get().getFavChallenge1(),
+            user.get().getFavChallenge2()
+        );
+        return ResponseEntity.ok(dto);
+    }
+
+    /**
+     * Update favorite challenge 1
+     * PATCH /api/users/{id}/favorite1
+     */
+    @PatchMapping("/{id}/favorite1")
+    public ResponseEntity<User> updateFavChallenge1(
+            @PathVariable String id, 
+            @RequestBody FavoriteChallengeRequest request) {
+        Optional<User> updatedUser = userService.updateFavChallenge1(id, request.getChallengeId());
+        return updatedUser.map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    /**
+     * Update favorite challenge 2
+     * PATCH /api/users/{id}/favorite2
+     */
+    @PatchMapping("/{id}/favorite2")
+    public ResponseEntity<User> updateFavChallenge2(
+            @PathVariable String id, 
+            @RequestBody FavoriteChallengeRequest request) {
+        Optional<User> updatedUser = userService.updateFavChallenge2(id, request.getChallengeId());
+        return updatedUser.map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    /**
+     * Update both favorite challenges
+     * PATCH /api/users/{id}/favorites
+     */
+    @PatchMapping("/{id}/favorites")
+    public ResponseEntity<User> updateFavoriteChallenges(
+            @PathVariable String id, 
+            @RequestBody FavoriteChallengesDTO request) {
+        Optional<User> updatedUser = userService.updateFavChallenges(
+            id, 
+            request.getFavChallenge1(), 
+            request.getFavChallenge2()
+        );
+        return updatedUser.map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    // Inner classes for request/response DTOs
+    public static class FavoriteChallengeRequest {
+        private String challengeId;
+
+        public FavoriteChallengeRequest() {}
+
+        public String getChallengeId() { return challengeId; }
+        public void setChallengeId(String challengeId) { this.challengeId = challengeId; }
+    }
+
+    public static class FavoriteChallengesDTO {
+        private String favChallenge1;
+        private String favChallenge2;
+
+        public FavoriteChallengesDTO() {}
+
+        public FavoriteChallengesDTO(String favChallenge1, String favChallenge2) {
+            this.favChallenge1 = favChallenge1;
+            this.favChallenge2 = favChallenge2;
+        }
+
+        public String getFavChallenge1() { return favChallenge1; }
+        public void setFavChallenge1(String favChallenge1) { this.favChallenge1 = favChallenge1; }
+
+        public String getFavChallenge2() { return favChallenge2; }
+        public void setFavChallenge2(String favChallenge2) { this.favChallenge2 = favChallenge2; }
+    }
 }

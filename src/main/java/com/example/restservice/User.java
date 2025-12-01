@@ -9,6 +9,8 @@ public class User {
     private String email;
     private Instant createdAt;
     private Instant updatedAt;
+    private String favChallenge1;
+    private String favChallenge2;
 
     public User() {}
 
@@ -19,6 +21,18 @@ public class User {
         this.email = email;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+    }
+
+    public User(String id, String username, String password, String email, Instant createdAt, Instant updatedAt, 
+                String favChallenge1, String favChallenge2) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.favChallenge1 = favChallenge1;
+        this.favChallenge2 = favChallenge2;
     }
 
     // Getters and setters
@@ -39,4 +53,10 @@ public class User {
 
     public Instant getUpdatedAt() { return updatedAt; }
     public void setUpdatedAt(Instant updatedAt) { this.updatedAt = updatedAt; }
+
+    public String getFavChallenge1() { return favChallenge1; }
+    public void setFavChallenge1(String favChallenge1) { this.favChallenge1 = favChallenge1; }
+
+    public String getFavChallenge2() { return favChallenge2; }
+    public void setFavChallenge2(String favChallenge2) { this.favChallenge2 = favChallenge2; }
 }
