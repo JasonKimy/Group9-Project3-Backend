@@ -147,14 +147,16 @@ public class UserService {
     /**
      * Create a new user
      */
-    public User createUser(String username, String password, String email) {
+    public User createUser(String username, String password, String email, String favChallenge1, String favChallenge2) {
         User user = new User(
                 UUID.randomUUID().toString(),
                 username,
                 password, // Note: In production, this should be hashed before calling this method
                 email,
                 Instant.now(),
-                Instant.now()
+                Instant.now(),
+                favChallenge1,
+                favChallenge2
         );
 
         try {

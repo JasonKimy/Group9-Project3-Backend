@@ -80,7 +80,9 @@ public class UserController {
         User createdUser = userService.createUser(
                 user.getUsername(),
                 user.getPassword(),
-                user.getEmail()
+                user.getEmail(),
+                user.getFavChallenge1(),
+                user.getFavChallenge2()
         );
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
     }
