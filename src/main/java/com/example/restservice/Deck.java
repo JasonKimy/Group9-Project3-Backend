@@ -9,16 +9,16 @@ public class Deck {
     @JsonProperty("created_at")
     private Instant createdAt;
     
-    @JsonProperty("user-id")
+    @JsonProperty("user - id")
     private String userId;
     
-    @JsonProperty("place_1-id")
+    @JsonProperty("place_1 - id")
     private String place1Id;
     
-    @JsonProperty("place_2-id")
+    @JsonProperty("place_2 - id")
     private String place2Id;
     
-    @JsonProperty("place_3-id")
+    @JsonProperty("place_3 - id")
     private String place3Id;
     
     private String category;
