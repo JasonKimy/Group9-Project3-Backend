@@ -14,13 +14,13 @@ public class Deck {
     @JsonProperty("user_id")
     private String userId;
     
-    @JsonProperty("place_1-id")
+    @JsonProperty("place_1_id")
     private String place1Id;
     
-    @JsonProperty("place_2-id")
+    @JsonProperty("place_2_id")
     private String place2Id;
     
-    @JsonProperty("place_3-id")
+    @JsonProperty("place_3_id")
     private String place3Id;
     
     private String category;
