@@ -51,7 +51,7 @@ public class DeckService {
     public List<DeckDTO> getAllDecksForUser(String userId) {
         try {
             String url = UriComponentsBuilder.fromHttpUrl(getTableUrl())
-                    .queryParam("user-id", "eq." + userId)
+                    .queryParam("user_id", "eq." + userId)
                     .toUriString();
 
             HttpEntity<String> entity = new HttpEntity<>(createHeaders());
