@@ -12,9 +12,11 @@ import java.util.Optional;
 public class UserController {
 
     private final UserService userService;
+    private final LeaderboardService leaderboardService;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, LeaderboardService leaderboardService) {
         this.userService = userService;
+        this.leaderboardService = leaderboardService;
     }
 
     /**
@@ -255,6 +257,64 @@ public class UserController {
 
         public Long getPoints() { return points; }
         public void setPoints(Long points) { this.points = points; }
+    }
+
+    /**
+     * Get global leaderboard
+     * GET /api/users/leaderboard/global?limit=5
+     */
+    @GetMapping("/leaderboard/global")
+    public ResponseEntity<List<User>> getGlobalLeaderboard(@RequestParam(defaultValue = "5") int limit) {
+        try {
+            List<User> topUsers = leaderboardService.getTopUsersByPoints(limit);
+            return ResponseEntity.ok(topUsers);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    /**
+     * Get user's global rank
+     * GET /api/users/leaderboard/global/rank/{userId}
+     */
+    @GetMapping("/leaderboard/global/rank/{userId}")
+    public ResponseEntity<Integer> getGlobalRank(@PathVariable String userId) {
+        try {
+            int rank = leaderboardService.getUserGlobalRank(userId);
+            return ResponseEntity.ok(rank);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(-1);
+        }
+    }
+
+    /**
+     * Get friends leaderboard
+     * GET /api/users/leaderboard/friends/{userId}?limit=5
+     */
+    @GetMapping("/leaderboard/friends/{userId}")
+    public ResponseEntity<List<User>> getFriendsLeaderboard(
+            @PathVariable String userId,
+            @RequestParam(defaultValue = "5") int limit) {
+        try {
+            List<User> topFriends = leaderboardService.getTopFriendsByPoints(userId, limit);
+            return ResponseEntity.ok(topFriends);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    /**
+     * Get user's rank on friends leaderboard
+     * GET /api/users/leaderboard/friends/rank/{userId}
+     */
+    @GetMapping("/leaderboard/friends/rank/{userId}")
+    public ResponseEntity<Integer> getFriendsRank(@PathVariable String userId) {
+        try {
+            int rank = leaderboardService.getUserFriendsRank(userId);
+            return ResponseEntity.ok(rank);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(-1);
+        }
     }
 }
 
