@@ -16,6 +16,9 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
   	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+	// Apache HttpComponents 5 to enable PATCH support in RestTemplate
+	implementation 'org.apache.httpcomponents.core5:httpcore5:5.2.4'
+	implementation 'org.apache.httpcomponents.client5:httpclient5:5.3.1'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
