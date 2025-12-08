@@ -84,7 +84,8 @@ public class UserController {
                 user.getPassword(),
                 user.getEmail(),
                 user.getFavChallenge1(),
-                user.getFavChallenge2()
+                user.getFavChallenge2(),
+                user.getAvatarUrl()
         );
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
     }

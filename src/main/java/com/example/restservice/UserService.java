@@ -147,7 +147,7 @@ public class UserService {
     /**
      * Create a new user
      */
-    public User createUser(String username, String password, String email, String favChallenge1, String favChallenge2) {
+    public User createUser(String username, String password, String email, String favChallenge1, String favChallenge2, String avatarUrl) {
         User user = new User(
                 UUID.randomUUID().toString(),
                 username,
@@ -156,7 +156,9 @@ public class UserService {
                 Instant.now(),
                 Instant.now(),
                 favChallenge1,
-                favChallenge2
+                favChallenge2,
+                0L,
+                avatarUrl != null ? avatarUrl : "../assets/Wander-Avatars/Normal/normal1.png"
         );
 
         try {
