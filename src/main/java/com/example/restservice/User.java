@@ -20,6 +20,8 @@ public class User {
     
     @JsonProperty("fav_challenge_2")
     private String favChallenge2;
+    
+    private Long points;
 
     public User() {}
 
@@ -30,6 +32,7 @@ public class User {
         this.email = email;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.points = 0L;
     }
 
     public User(String id, String username, String password, String email, Instant createdAt, Instant updatedAt, 
@@ -42,6 +45,20 @@ public class User {
         this.updatedAt = updatedAt;
         this.favChallenge1 = favChallenge1;
         this.favChallenge2 = favChallenge2;
+        this.points = 0L;
+    }
+
+    public User(String id, String username, String password, String email, Instant createdAt, Instant updatedAt, 
+                String favChallenge1, String favChallenge2, Long points) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.favChallenge1 = favChallenge1;
+        this.favChallenge2 = favChallenge2;
+        this.points = points;
     }
 
     // Getters and setters
@@ -68,4 +85,8 @@ public class User {
 
     public String getFavChallenge2() { return favChallenge2; }
     public void setFavChallenge2(String favChallenge2) { this.favChallenge2 = favChallenge2; }
+
+    public Long getPoints() { return points; }
+    public void setPoints(Long points) { this.points = points; }
 }
+

@@ -190,6 +190,32 @@ public class UserController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    /**
+     * Update user points
+     * PATCH /api/users/{id}/points
+     */
+    @PatchMapping("/{id}/points")
+    public ResponseEntity<User> updatePoints(
+            @PathVariable String id,
+            @RequestBody PointsUpdateRequest request) {
+        Optional<User> updatedUser = userService.updatePoints(id, request.getPoints());
+        return updatedUser.map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    /**
+     * Add points to user
+     * POST /api/users/{id}/points/add
+     */
+    @PostMapping("/{id}/points/add")
+    public ResponseEntity<User> addPoints(
+            @PathVariable String id,
+            @RequestBody PointsUpdateRequest request) {
+        Optional<User> updatedUser = userService.addPoints(id, request.getPoints());
+        return updatedUser.map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     // Inner classes for request/response DTOs
     public static class FavoriteChallengeRequest {
         private String challengeId;
@@ -217,4 +243,18 @@ public class UserController {
         public String getFavChallenge2() { return favChallenge2; }
         public void setFavChallenge2(String favChallenge2) { this.favChallenge2 = favChallenge2; }
     }
+
+    public static class PointsUpdateRequest {
+        private Long points;
+
+        public PointsUpdateRequest() {}
+
+        public PointsUpdateRequest(Long points) {
+            this.points = points;
+        }
+
+        public Long getPoints() { return points; }
+        public void setPoints(Long points) { this.points = points; }
+    }
 }
+
