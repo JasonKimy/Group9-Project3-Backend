@@ -404,6 +404,7 @@ public class UserService {
             return users.isEmpty() ? Optional.empty() : Optional.of(users.get(0));
         } catch (Exception e) {
             System.err.println("Error updating favorite challenges: " + e.getMessage());
+            e.printStackTrace();
             return Optional.empty();
         }
     }
@@ -439,6 +440,7 @@ public class UserService {
             return users.isEmpty() ? Optional.empty() : Optional.of(users.get(0));
         } catch (Exception e) {
             System.err.println("Error updating avatar: " + e.getMessage());
+            e.printStackTrace();
             return Optional.empty();
         }
     }
