@@ -407,5 +407,40 @@ public class UserService {
             return Optional.empty();
         }
     }
+
+    /**
+     * Update user's avatar URL
+     */
+    public Optional<User> updateAvatar(String id, String avatarUrl) {
+        try {
+            Optional<User> userOpt = findById(id);
+            if (userOpt.isEmpty()) {
+                return Optional.empty();
+            }
+
+            User user = userOpt.get();
+            user.setAvatarUrl(avatarUrl);
+            user.setUpdatedAt(Instant.now());
+
+            String json = objectMapper.writeValueAsString(user);
+            String url = UriComponentsBuilder.fromHttpUrl(getTableUrl())
+                    .queryParam("id", "eq." + id)
+                    .toUriString();
+
+            HttpEntity<String> entity = new HttpEntity<>(json, createHeaders());
+            ResponseEntity<String> response = restTemplate.exchange(
+                    url,
+                    HttpMethod.PATCH,
+                    entity,
+                    String.class
+            );
+
+            List<User> users = objectMapper.readValue(response.getBody(), new TypeReference<List<User>>() {});
+            return users.isEmpty() ? Optional.empty() : Optional.of(users.get(0));
+        } catch (Exception e) {
+            System.err.println("Error updating avatar: " + e.getMessage());
+            return Optional.empty();
+        }
+    }
 }
 
