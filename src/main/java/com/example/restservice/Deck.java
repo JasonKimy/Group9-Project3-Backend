@@ -1,42 +1,59 @@
 package com.example.restservice;
 
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import java.time.Instant;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Deck {
-    private String id;          // Usually same as category name
-    private String name;
-    private String description;
+    private Long id;
+    
+    @JsonProperty("created_at")
+    private Instant createdAt;
+    
+    @JsonProperty("user_id")
+    private String userId;
+    
+    @JsonProperty("place_1_id")
+    private String place1Id;
+    
+    @JsonProperty("place_2_id")
+    private String place2Id;
+    
+    @JsonProperty("place_3_id")
+    private String place3Id;
+    
     private String category;
-    private List<Place> places;
-    private int completedCount;
 
     public Deck() {}
 
-    public Deck(String id, String name, String description, String category, List<Place> places, int completedCount) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
+    public Deck(String userId, String place1Id, String place2Id, String place3Id, String category) {
+        this.userId = userId;
+        this.place1Id = place1Id;
+        this.place2Id = place2Id;
+        this.place3Id = place3Id;
         this.category = category;
-        this.places = places;
-        this.completedCount = completedCount;
     }
 
     // Getters and setters
-    public String getId() { return id; }
-    public void setId(String id) { this.id = id; }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public Instant getCreatedAt() { return createdAt; }
+    public void setCreatedAt(Instant createdAt) { this.createdAt = createdAt; }
 
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
+    public String getUserId() { return userId; }
+    public void setUserId(String userId) { this.userId = userId; }
+
+    public String getPlace1Id() { return place1Id; }
+    public void setPlace1Id(String place1Id) { this.place1Id = place1Id; }
+
+    public String getPlace2Id() { return place2Id; }
+    public void setPlace2Id(String place2Id) { this.place2Id = place2Id; }
+
+    public String getPlace3Id() { return place3Id; }
+    public void setPlace3Id(String place3Id) { this.place3Id = place3Id; }
 
     public String getCategory() { return category; }
     public void setCategory(String category) { this.category = category; }
-
-    public List<Place> getPlaces() { return places; }
-    public void setPlaces(List<Place> places) { this.places = places; }
-
-    public int getCompletedCount() { return completedCount; }
-    public void setCompletedCount(int completedCount) { this.completedCount = completedCount; }
 }

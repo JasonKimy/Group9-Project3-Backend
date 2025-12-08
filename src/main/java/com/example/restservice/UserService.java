@@ -147,14 +147,16 @@ public class UserService {
     /**
      * Create a new user
      */
-    public User createUser(String username, String password, String email) {
+    public User createUser(String username, String password, String email, String favChallenge1, String favChallenge2) {
         User user = new User(
                 UUID.randomUUID().toString(),
                 username,
                 password, // Note: In production, this should be hashed before calling this method
                 email,
                 Instant.now(),
-                Instant.now()
+                Instant.now(),
+                favChallenge1,
+                favChallenge2
         );
 
         try {
@@ -240,5 +242,111 @@ public class UserService {
      */
     public boolean emailExists(String email) {
         return findByEmail(email).isPresent();
+    }
+
+    /**
+     * Update user's favorite challenge 1
+     */
+    public Optional<User> updateFavChallenge1(String id, String favChallenge1) {
+        try {
+            Optional<User> userOpt = findById(id);
+            if (userOpt.isEmpty()) {
+                return Optional.empty();
+            }
+
+            User user = userOpt.get();
+            user.setFavChallenge1(favChallenge1);
+            user.setUpdatedAt(Instant.now());
+
+            String json = objectMapper.writeValueAsString(user);
+            String url = UriComponentsBuilder.fromHttpUrl(getTableUrl())
+                    .queryParam("id", "eq." + id)
+                    .toUriString();
+
+            HttpEntity<String> entity = new HttpEntity<>(json, createHeaders());
+            ResponseEntity<String> response = restTemplate.exchange(
+                    url,
+                    HttpMethod.PATCH,
+                    entity,
+                    String.class
+            );
+
+            List<User> users = objectMapper.readValue(response.getBody(), new TypeReference<List<User>>() {});
+            return users.isEmpty() ? Optional.empty() : Optional.of(users.get(0));
+        } catch (Exception e) {
+            System.err.println("Error updating favorite challenge 1: " + e.getMessage());
+            return Optional.empty();
+        }
+    }
+
+    /**
+     * Update user's favorite challenge 2
+     */
+    public Optional<User> updateFavChallenge2(String id, String favChallenge2) {
+        try {
+            Optional<User> userOpt = findById(id);
+            if (userOpt.isEmpty()) {
+                return Optional.empty();
+            }
+
+            User user = userOpt.get();
+            user.setFavChallenge2(favChallenge2);
+            user.setUpdatedAt(Instant.now());
+
+            String json = objectMapper.writeValueAsString(user);
+            String url = UriComponentsBuilder.fromHttpUrl(getTableUrl())
+                    .queryParam("id", "eq." + id)
+                    .toUriString();
+
+            HttpEntity<String> entity = new HttpEntity<>(json, createHeaders());
+            ResponseEntity<String> response = restTemplate.exchange(
+                    url,
+                    HttpMethod.PATCH,
+                    entity,
+                    String.class
+            );
+
+            List<User> users = objectMapper.readValue(response.getBody(), new TypeReference<List<User>>() {});
+            return users.isEmpty() ? Optional.empty() : Optional.of(users.get(0));
+        } catch (Exception e) {
+            System.err.println("Error updating favorite challenge 2: " + e.getMessage());
+            return Optional.empty();
+        }
+    }
+
+    /**
+     * Update both favorite challenges at once
+     */
+    public Optional<User> updateFavChallenges(String id, String favChallenge1, String favChallenge2) {
+        try {
+            Optional<User> userOpt = findById(id);
+            if (userOpt.isEmpty()) {
+                return Optional.empty();
+            }
+
+            User user = userOpt.get();
+            user.setFavChallenge1(favChallenge1);
+            user.setFavChallenge2(favChallenge2);
+            user.setUpdatedAt(Instant.now());
+
+            String json = objectMapper.writeValueAsString(user);
+            String url = UriComponentsBuilder.fromHttpUrl(getTableUrl())
+                    .queryParam("id", "eq." + id)
+                    .toUriString();
+
+            HttpEntity<String> entity = new HttpEntity<>(json, createHeaders());
+            ResponseEntity<String> response = restTemplate.exchange(
+                    url,
+                    HttpMethod.PATCH,
+                    entity,
+                    String.class
+            );
+
+            List<User> users = objectMapper.readValue(response.getBody(), new TypeReference<List<User>>() {});
+            return users.isEmpty() ? Optional.empty() : Optional.of(users.get(0));
+        } catch (Exception e) {
+            System.err.println("Error updating favorite challenges: " + e.getMessage());
+            return Optional.empty();
+        }
     }
 }
