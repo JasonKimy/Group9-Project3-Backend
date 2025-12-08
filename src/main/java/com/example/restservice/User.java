@@ -9,6 +9,7 @@ public class User {
     private String email;
     private Instant createdAt;
     private Instant updatedAt;
+    private Long points;
 
     public User() {}
 
@@ -19,6 +20,17 @@ public class User {
         this.email = email;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.points = 0L;
+    }
+
+    public User(String id, String username, String password, String email, Instant createdAt, Instant updatedAt, Long points) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.points = points;
     }
 
     // Getters and setters
@@ -39,4 +51,7 @@ public class User {
 
     public Instant getUpdatedAt() { return updatedAt; }
     public void setUpdatedAt(Instant updatedAt) { this.updatedAt = updatedAt; }
+
+    public Long getPoints() { return points; }
+    public void setPoints(Long points) { this.points = points; }
 }

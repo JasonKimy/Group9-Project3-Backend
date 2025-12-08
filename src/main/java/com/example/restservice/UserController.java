@@ -126,4 +126,51 @@ public class UserController {
         boolean exists = userService.emailExists(email);
         return ResponseEntity.ok(exists);
     }
+
+    /**
+     * Update user points
+     * PATCH /api/users/{id}/points
+     */
+    @PatchMapping("/{id}/points")
+    public ResponseEntity<User> updatePoints(
+            @PathVariable String id,
+            @RequestBody PointsUpdateRequest request) {
+        Optional<User> updatedUser = userService.updatePoints(id, request.getPoints());
+        return updatedUser.map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    /**
+     * Add points to user
+     * POST /api/users/{id}/points/add
+     */
+    @PostMapping("/{id}/points/add")
+    public ResponseEntity<User> addPoints(
+            @PathVariable String id,
+            @RequestBody PointsUpdateRequest request) {
+        Optional<User> updatedUser = userService.addPoints(id, request.getPoints());
+        return updatedUser.map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    /**
+     * Inner class for points update requests
+     */
+    public static class PointsUpdateRequest {
+        private Long points;
+
+        public PointsUpdateRequest() {}
+
+        public PointsUpdateRequest(Long points) {
+            this.points = points;
+        }
+
+        public Long getPoints() {
+            return points;
+        }
+
+        public void setPoints(Long points) {
+            this.points = points;
+        }
+    }
 }

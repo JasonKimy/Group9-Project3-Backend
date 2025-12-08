@@ -241,4 +241,60 @@ public class UserService {
     public boolean emailExists(String email) {
         return findByEmail(email).isPresent();
     }
+
+    /**
+     * Update user points
+     */
+    public Optional<User> updatePoints(String userId, Long points) {
+        try {
+            Optional<User> userOpt = findById(userId);
+            if (userOpt.isEmpty()) {
+                return Optional.empty();
+            }
+
+            User user = userOpt.get();
+            user.setPoints(points);
+            user.setUpdatedAt(Instant.now());
+
+            String json = objectMapper.writeValueAsString(user);
+            String url = UriComponentsBuilder.fromHttpUrl(getTableUrl())
+                    .queryParam("id", "eq." + userId)
+                    .toUriString();
+
+            HttpEntity<String> entity = new HttpEntity<>(json, createHeaders());
+            ResponseEntity<String> response = restTemplate.exchange(
+                    url,
+                    HttpMethod.PATCH,
+                    entity,
+                    String.class
+            );
+
+            List<User> users = objectMapper.readValue(response.getBody(), new TypeReference<List<User>>() {});
+            return users.isEmpty() ? Optional.empty() : Optional.of(users.get(0));
+        } catch (Exception e) {
+            System.err.println("Error updating user points: " + e.getMessage());
+            return Optional.empty();
+        }
+    }
+
+    /**
+     * Add points to user
+     */
+    public Optional<User> addPoints(String userId, Long pointsToAdd) {
+        try {
+            Optional<User> userOpt = findById(userId);
+            if (userOpt.isEmpty()) {
+                return Optional.empty();
+            }
+
+            User user = userOpt.get();
+            Long currentPoints = user.getPoints() != null ? user.getPoints() : 0L;
+            Long newPoints = currentPoints + pointsToAdd;
+            
+            return updatePoints(userId, newPoints);
+        } catch (Exception e) {
+            System.err.println("Error adding points to user: " + e.getMessage());
+            return Optional.empty();
+        }
+    }
 }
