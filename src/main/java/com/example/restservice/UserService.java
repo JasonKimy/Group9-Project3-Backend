@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.time.Instant;
@@ -17,7 +17,7 @@ import java.util.UUID;
 @Service
 public class UserService {
 
-    private final RestTemplate restTemplate;
+    private final WebClient webClient;
     private final ObjectMapper objectMapper;
 
     @Value("${supabase.url}")
@@ -28,8 +28,8 @@ public class UserService {
 
     private static final String TABLE_NAME = "users";
 
-    public UserService(RestTemplate restTemplate, ObjectMapper objectMapper) {
-        this.restTemplate = restTemplate;
+    public UserService(WebClient webClient, ObjectMapper objectMapper) {
+        this.webClient = webClient;
         this.objectMapper = objectMapper;
     }
 
@@ -51,15 +51,16 @@ public class UserService {
      */
     public List<User> findAll() {
         try {
-            HttpEntity<String> entity = new HttpEntity<>(createHeaders());
-            ResponseEntity<String> response = restTemplate.exchange(
-                    getTableUrl(),
-                    HttpMethod.GET,
-                    entity,
-                    String.class
-            );
+            String responseBody = webClient.get()
+                    .uri(getTableUrl())
+                    .header("apikey", supabaseKey)
+                    .header("Authorization", "Bearer " + supabaseKey)
+                    .header("Prefer", "return=representation")
+                    .retrieve()
+                    .bodyToMono(String.class)
+                    .block();
 
-            return objectMapper.readValue(response.getBody(), new TypeReference<List<User>>() {});
+            return objectMapper.readValue(responseBody, new TypeReference<List<User>>() {});
         } catch (Exception e) {
             System.err.println("Error fetching all users: " + e.getMessage());
             return new ArrayList<>();
@@ -76,15 +77,16 @@ public class UserService {
                     .queryParam("limit", "1")
                     .toUriString();
 
-            HttpEntity<String> entity = new HttpEntity<>(createHeaders());
-            ResponseEntity<String> response = restTemplate.exchange(
-                    url,
-                    HttpMethod.GET,
-                    entity,
-                    String.class
-            );
+            String responseBody = webClient.get()
+                    .uri(url)
+                    .header("apikey", supabaseKey)
+                    .header("Authorization", "Bearer " + supabaseKey)
+                    .header("Prefer", "return=representation")
+                    .retrieve()
+                    .bodyToMono(String.class)
+                    .block();
 
-            List<User> users = objectMapper.readValue(response.getBody(), new TypeReference<List<User>>() {});
+            List<User> users = objectMapper.readValue(responseBody, new TypeReference<List<User>>() {});
             return users.isEmpty() ? Optional.empty() : Optional.of(users.get(0));
         } catch (Exception e) {
             System.err.println("Error fetching user by ID: " + e.getMessage());
@@ -102,15 +104,16 @@ public class UserService {
                     .queryParam("limit", "1")
                     .toUriString();
 
-            HttpEntity<String> entity = new HttpEntity<>(createHeaders());
-            ResponseEntity<String> response = restTemplate.exchange(
-                    url,
-                    HttpMethod.GET,
-                    entity,
-                    String.class
-            );
+            String responseBody = webClient.get()
+                    .uri(url)
+                    .header("apikey", supabaseKey)
+                    .header("Authorization", "Bearer " + supabaseKey)
+                    .header("Prefer", "return=representation")
+                    .retrieve()
+                    .bodyToMono(String.class)
+                    .block();
 
-            List<User> users = objectMapper.readValue(response.getBody(), new TypeReference<List<User>>() {});
+            List<User> users = objectMapper.readValue(responseBody, new TypeReference<List<User>>() {});
             return users.isEmpty() ? Optional.empty() : Optional.of(users.get(0));
         } catch (Exception e) {
             System.err.println("Error fetching user by username: " + e.getMessage());
@@ -128,15 +131,16 @@ public class UserService {
                     .queryParam("limit", "1")
                     .toUriString();
 
-            HttpEntity<String> entity = new HttpEntity<>(createHeaders());
-            ResponseEntity<String> response = restTemplate.exchange(
-                    url,
-                    HttpMethod.GET,
-                    entity,
-                    String.class
-            );
+            String responseBody = webClient.get()
+                    .uri(url)
+                    .header("apikey", supabaseKey)
+                    .header("Authorization", "Bearer " + supabaseKey)
+                    .header("Prefer", "return=representation")
+                    .retrieve()
+                    .bodyToMono(String.class)
+                    .block();
 
-            List<User> users = objectMapper.readValue(response.getBody(), new TypeReference<List<User>>() {});
+            List<User> users = objectMapper.readValue(responseBody, new TypeReference<List<User>>() {});
             return users.isEmpty() ? Optional.empty() : Optional.of(users.get(0));
         } catch (Exception e) {
             System.err.println("Error fetching user by email: " + e.getMessage());
@@ -147,7 +151,7 @@ public class UserService {
     /**
      * Create a new user
      */
-    public User createUser(String username, String password, String email, String favChallenge1, String favChallenge2) {
+    public User createUser(String username, String password, String email, String favChallenge1, String favChallenge2, String avatarUrl) {
         User user = new User(
                 UUID.randomUUID().toString(),
                 username,
@@ -156,21 +160,26 @@ public class UserService {
                 Instant.now(),
                 Instant.now(),
                 favChallenge1,
-                favChallenge2
+                favChallenge2,
+                0L,
+                avatarUrl != null ? avatarUrl : "../assets/Wander-Avatars/Normal/normal1.png"
         );
 
         try {
             String json = objectMapper.writeValueAsString(user);
-            HttpEntity<String> entity = new HttpEntity<>(json, createHeaders());
 
-            ResponseEntity<String> response = restTemplate.exchange(
-                    getTableUrl(),
-                    HttpMethod.POST,
-                    entity,
-                    String.class
-            );
+            String responseBody = webClient.post()
+                    .uri(getTableUrl())
+                    .header("apikey", supabaseKey)
+                    .header("Authorization", "Bearer " + supabaseKey)
+                    .header("Prefer", "return=representation")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .bodyValue(json)
+                    .retrieve()
+                    .bodyToMono(String.class)
+                    .block();
 
-            List<User> users = objectMapper.readValue(response.getBody(), new TypeReference<List<User>>() {});
+            List<User> users = objectMapper.readValue(responseBody, new TypeReference<List<User>>() {});
             return users.isEmpty() ? user : users.get(0);
         } catch (Exception e) {
             System.err.println("Error creating user: " + e.getMessage());
@@ -191,15 +200,18 @@ public class UserService {
                     .queryParam("id", "eq." + id)
                     .toUriString();
 
-            HttpEntity<String> entity = new HttpEntity<>(json, createHeaders());
-            ResponseEntity<String> response = restTemplate.exchange(
-                    url,
-                    HttpMethod.PATCH,
-                    entity,
-                    String.class
-            );
+            String responseBody = webClient.patch()
+                    .uri(url)
+                    .header("apikey", supabaseKey)
+                    .header("Authorization", "Bearer " + supabaseKey)
+                    .header("Prefer", "return=representation")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .bodyValue(json)
+                    .retrieve()
+                    .bodyToMono(String.class)
+                    .block();
 
-            List<User> users = objectMapper.readValue(response.getBody(), new TypeReference<List<User>>() {});
+            List<User> users = objectMapper.readValue(responseBody, new TypeReference<List<User>>() {});
             return users.isEmpty() ? Optional.empty() : Optional.of(users.get(0));
         } catch (Exception e) {
             System.err.println("Error updating user: " + e.getMessage());
@@ -216,13 +228,13 @@ public class UserService {
                     .queryParam("id", "eq." + id)
                     .toUriString();
 
-            HttpEntity<String> entity = new HttpEntity<>(createHeaders());
-            restTemplate.exchange(
-                    url,
-                    HttpMethod.DELETE,
-                    entity,
-                    String.class
-            );
+            webClient.delete()
+                    .uri(url)
+                    .header("apikey", supabaseKey)
+                    .header("Authorization", "Bearer " + supabaseKey)
+                    .retrieve()
+                    .bodyToMono(Void.class)
+                    .block();
             return true;
         } catch (Exception e) {
             System.err.println("Error deleting user: " + e.getMessage());
@@ -263,15 +275,18 @@ public class UserService {
                     .queryParam("id", "eq." + userId)
                     .toUriString();
 
-            HttpEntity<String> entity = new HttpEntity<>(json, createHeaders());
-            ResponseEntity<String> response = restTemplate.exchange(
-                    url,
-                    HttpMethod.PATCH,
-                    entity,
-                    String.class
-            );
+            String responseBody = webClient.patch()
+                    .uri(url)
+                    .header("apikey", supabaseKey)
+                    .header("Authorization", "Bearer " + supabaseKey)
+                    .header("Prefer", "return=representation")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .bodyValue(json)
+                    .retrieve()
+                    .bodyToMono(String.class)
+                    .block();
 
-            List<User> users = objectMapper.readValue(response.getBody(), new TypeReference<List<User>>() {});
+            List<User> users = objectMapper.readValue(responseBody, new TypeReference<List<User>>() {});
             return users.isEmpty() ? Optional.empty() : Optional.of(users.get(0));
         } catch (Exception e) {
             System.err.println("Error updating user points: " + e.getMessage());
@@ -319,15 +334,18 @@ public class UserService {
                     .queryParam("id", "eq." + id)
                     .toUriString();
 
-            HttpEntity<String> entity = new HttpEntity<>(json, createHeaders());
-            ResponseEntity<String> response = restTemplate.exchange(
-                    url,
-                    HttpMethod.PATCH,
-                    entity,
-                    String.class
-            );
+            String responseBody = webClient.patch()
+                    .uri(url)
+                    .header("apikey", supabaseKey)
+                    .header("Authorization", "Bearer " + supabaseKey)
+                    .header("Prefer", "return=representation")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .bodyValue(json)
+                    .retrieve()
+                    .bodyToMono(String.class)
+                    .block();
 
-            List<User> users = objectMapper.readValue(response.getBody(), new TypeReference<List<User>>() {});
+            List<User> users = objectMapper.readValue(responseBody, new TypeReference<List<User>>() {});
             return users.isEmpty() ? Optional.empty() : Optional.of(users.get(0));
         } catch (Exception e) {
             System.err.println("Error updating favorite challenge 1: " + e.getMessage());
@@ -354,15 +372,18 @@ public class UserService {
                     .queryParam("id", "eq." + id)
                     .toUriString();
 
-            HttpEntity<String> entity = new HttpEntity<>(json, createHeaders());
-            ResponseEntity<String> response = restTemplate.exchange(
-                    url,
-                    HttpMethod.PATCH,
-                    entity,
-                    String.class
-            );
+            String responseBody = webClient.patch()
+                    .uri(url)
+                    .header("apikey", supabaseKey)
+                    .header("Authorization", "Bearer " + supabaseKey)
+                    .header("Prefer", "return=representation")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .bodyValue(json)
+                    .retrieve()
+                    .bodyToMono(String.class)
+                    .block();
 
-            List<User> users = objectMapper.readValue(response.getBody(), new TypeReference<List<User>>() {});
+            List<User> users = objectMapper.readValue(responseBody, new TypeReference<List<User>>() {});
             return users.isEmpty() ? Optional.empty() : Optional.of(users.get(0));
         } catch (Exception e) {
             System.err.println("Error updating favorite challenge 2: " + e.getMessage());
@@ -390,18 +411,61 @@ public class UserService {
                     .queryParam("id", "eq." + id)
                     .toUriString();
 
-            HttpEntity<String> entity = new HttpEntity<>(json, createHeaders());
-            ResponseEntity<String> response = restTemplate.exchange(
-                    url,
-                    HttpMethod.PATCH,
-                    entity,
-                    String.class
-            );
+            String responseBody = webClient.patch()
+                    .uri(url)
+                    .header("apikey", supabaseKey)
+                    .header("Authorization", "Bearer " + supabaseKey)
+                    .header("Prefer", "return=representation")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .bodyValue(json)
+                    .retrieve()
+                    .bodyToMono(String.class)
+                    .block();
 
-            List<User> users = objectMapper.readValue(response.getBody(), new TypeReference<List<User>>() {});
+            List<User> users = objectMapper.readValue(responseBody, new TypeReference<List<User>>() {});
             return users.isEmpty() ? Optional.empty() : Optional.of(users.get(0));
         } catch (Exception e) {
             System.err.println("Error updating favorite challenges: " + e.getMessage());
+            e.printStackTrace();
+            return Optional.empty();
+        }
+    }
+
+    /**
+     * Update user's avatar URL
+     */
+    public Optional<User> updateAvatar(String id, String avatarUrl) {
+        try {
+            Optional<User> userOpt = findById(id);
+            if (userOpt.isEmpty()) {
+                return Optional.empty();
+            }
+
+            User user = userOpt.get();
+            user.setAvatarUrl(avatarUrl);
+            user.setUpdatedAt(Instant.now());
+
+            String json = objectMapper.writeValueAsString(user);
+            String url = UriComponentsBuilder.fromHttpUrl(getTableUrl())
+                    .queryParam("id", "eq." + id)
+                    .toUriString();
+
+            String responseBody = webClient.patch()
+                    .uri(url)
+                    .header("apikey", supabaseKey)
+                    .header("Authorization", "Bearer " + supabaseKey)
+                    .header("Prefer", "return=representation")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .bodyValue(json)
+                    .retrieve()
+                    .bodyToMono(String.class)
+                    .block();
+
+            List<User> users = objectMapper.readValue(responseBody, new TypeReference<List<User>>() {});
+            return users.isEmpty() ? Optional.empty() : Optional.of(users.get(0));
+        } catch (Exception e) {
+            System.err.println("Error updating avatar: " + e.getMessage());
+            e.printStackTrace();
             return Optional.empty();
         }
     }

@@ -84,7 +84,8 @@ public class UserController {
                 user.getPassword(),
                 user.getEmail(),
                 user.getFavChallenge1(),
-                user.getFavChallenge2()
+                user.getFavChallenge2(),
+                user.getAvatarUrl()
         );
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
     }
@@ -193,6 +194,19 @@ public class UserController {
     }
 
     /**
+     * Update user avatar
+     * PATCH /api/users/{id}/avatar
+     */
+    @PatchMapping("/{id}/avatar")
+    public ResponseEntity<User> updateAvatar(
+            @PathVariable String id,
+            @RequestBody AvatarUpdateRequest request) {
+        Optional<User> updatedUser = userService.updateAvatar(id, request.getAvatarUrl());
+        return updatedUser.map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    /**
      * Update user points
      * PATCH /api/users/{id}/points
      */
@@ -244,6 +258,19 @@ public class UserController {
 
         public String getFavChallenge2() { return favChallenge2; }
         public void setFavChallenge2(String favChallenge2) { this.favChallenge2 = favChallenge2; }
+    }
+
+    public static class AvatarUpdateRequest {
+        private String avatarUrl;
+
+        public AvatarUpdateRequest() {}
+
+        public AvatarUpdateRequest(String avatarUrl) {
+            this.avatarUrl = avatarUrl;
+        }
+
+        public String getAvatarUrl() { return avatarUrl; }
+        public void setAvatarUrl(String avatarUrl) { this.avatarUrl = avatarUrl; }
     }
 
     public static class PointsUpdateRequest {

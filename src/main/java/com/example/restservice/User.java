@@ -22,6 +22,9 @@ public class User {
     private String favChallenge2;
     
     private Long points;
+    
+    @JsonProperty("avatar_url")
+    private String avatarUrl;
 
     public User() {}
 
@@ -33,6 +36,7 @@ public class User {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.points = 0L;
+        this.avatarUrl = "../assets/Wander-Avatars/Normal/normal1.png";
     }
 
     public User(String id, String username, String password, String email, Instant createdAt, Instant updatedAt, 
@@ -46,6 +50,7 @@ public class User {
         this.favChallenge1 = favChallenge1;
         this.favChallenge2 = favChallenge2;
         this.points = 0L;
+        this.avatarUrl = "../assets/Wander-Avatars/Normal/normal1.png";
     }
 
     public User(String id, String username, String password, String email, Instant createdAt, Instant updatedAt, 
@@ -59,6 +64,21 @@ public class User {
         this.favChallenge1 = favChallenge1;
         this.favChallenge2 = favChallenge2;
         this.points = points;
+        this.avatarUrl = "../assets/Wander-Avatars/Normal/normal1.png";
+    }
+
+    public User(String id, String username, String password, String email, Instant createdAt, Instant updatedAt, 
+                String favChallenge1, String favChallenge2, Long points, String avatarUrl) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.favChallenge1 = favChallenge1;
+        this.favChallenge2 = favChallenge2;
+        this.points = points;
+        this.avatarUrl = avatarUrl;
     }
 
     // Getters and setters
@@ -88,5 +108,8 @@ public class User {
 
     public Long getPoints() { return points; }
     public void setPoints(Long points) { this.points = points; }
+
+    public String getAvatarUrl() { return avatarUrl; }
+    public void setAvatarUrl(String avatarUrl) { this.avatarUrl = avatarUrl; }
 }
 
