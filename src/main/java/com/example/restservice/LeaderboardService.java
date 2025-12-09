@@ -120,7 +120,10 @@ public class LeaderboardService {
                 userOpt.ifPresent(friendUsers::add);
             }
             
-            // Sort
+            Optional<User> currentUserOpt = userService.findById(userId);
+            currentUserOpt.ifPresent(friendUsers::add);
+            System.out.println(friendUsers);
+            
             return friendUsers.stream()
                     .sorted(Comparator.comparingLong(User::getPoints).reversed())
                     .limit(count)
