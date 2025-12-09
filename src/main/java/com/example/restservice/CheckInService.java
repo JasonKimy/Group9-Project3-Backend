@@ -89,4 +89,26 @@ public class CheckInService {
             return false;
         }
     }
+
+    public List<CheckIn> getUserCheckIns(String userId) {
+        try {
+            String url = UriComponentsBuilder.fromHttpUrl(getTableUrl())
+                    .queryParam("userId", "eq." + userId)
+                    .queryParam("order", "timestamp.desc")
+                    .toUriString();
+
+            HttpEntity<String> entity = new HttpEntity<>(createHeaders());
+            ResponseEntity<String> response = restTemplate.exchange(
+                    url,
+                    HttpMethod.GET,
+                    entity,
+                    String.class
+            );
+
+            return objectMapper.readValue(response.getBody(), new TypeReference<List<CheckIn>>() {});
+        } catch (Exception e) {
+            e.printStackTrace();
+            return List.of();
+        }
+    }
 }

@@ -1,6 +1,7 @@
 package com.example.restservice;
 
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/checkins")
@@ -15,5 +16,10 @@ public class CheckInController {
     @PostMapping
     public CheckIn createCheckIn(@RequestBody CheckIn checkIn) {
         return checkInService.createCheckIn(checkIn.getUserId(), checkIn.getPlaceId(), checkIn.getPhotoUri());
+    }
+
+    @GetMapping("/user/{userId}")
+    public List<CheckIn> getUserCheckIns(@PathVariable String userId) {
+        return checkInService.getUserCheckIns(userId);
     }
 }
