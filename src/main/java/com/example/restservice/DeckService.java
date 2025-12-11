@@ -105,8 +105,9 @@ public class DeckService {
 
     /**
      * Create a new deck for a user with 3 random places from a category
+     * Prioritizes unvisited places
      */
-    public DeckDTO createDeck(String userId, String category) {
+    public DeckDTO createDeck(String userId, String category, List<String> visitedPlaceIds) {
         // Get all places in the category
         List<Place> allPlaces = supabaseService.findByCategory(category);
         
@@ -114,9 +115,32 @@ public class DeckService {
             throw new IllegalArgumentException("Not enough places in category: " + category);
         }
 
-        // Randomly select 3 places
-        Collections.shuffle(allPlaces);
-        List<Place> selectedPlaces = allPlaces.subList(0, 3);
+        // Separate places into visited and unvisited
+        List<Place> unvisitedPlaces = new ArrayList<>();
+        List<Place> visitedPlaces = new ArrayList<>();
+        
+        for (Place place : allPlaces) {
+            if (visitedPlaceIds.contains(place.getId())) {
+                visitedPlaces.add(place);
+            } else {
+                unvisitedPlaces.add(place);
+            }
+        }
+
+        // Prioritize unvisited places, but include visited if needed
+        List<Place> selectedPlaces = new ArrayList<>();
+        
+        // First, shuffle and add unvisited places
+        Collections.shuffle(unvisitedPlaces);
+        int unvisitedCount = Math.min(3, unvisitedPlaces.size());
+        selectedPlaces.addAll(unvisitedPlaces.subList(0, unvisitedCount));
+        
+        // If we need more places, add visited places
+        if (selectedPlaces.size() < 3) {
+            Collections.shuffle(visitedPlaces);
+            int neededCount = 3 - selectedPlaces.size();
+            selectedPlaces.addAll(visitedPlaces.subList(0, neededCount));
+        }
 
         // Create the deck
         Deck deck = new Deck(
