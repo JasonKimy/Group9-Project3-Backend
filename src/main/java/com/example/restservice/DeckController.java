@@ -4,11 +4,27 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/decks")
 public class DeckController {
+
+    /**
+     * Request body for deck creation with visited place IDs
+     */
+    public static class DeckCreationRequest {
+        private List<String> visitedPlaceIds;
+
+        public List<String> getVisitedPlaceIds() {
+            return visitedPlaceIds;
+        }
+
+        public void setVisitedPlaceIds(List<String> visitedPlaceIds) {
+            this.visitedPlaceIds = visitedPlaceIds;
+        }
+    }
 
     private final DeckService deckService;
 
@@ -46,9 +62,15 @@ public class DeckController {
      * Create a new deck for a user
      */
     @PostMapping
-    public ResponseEntity<DeckDTO> createDeck(@RequestParam String userId, @RequestParam String category) {
+    public ResponseEntity<DeckDTO> createDeck(
+            @RequestParam String userId, 
+            @RequestParam String category,
+            @RequestBody(required = false) DeckCreationRequest request) {
         try {
-            DeckDTO deck = deckService.createDeck(userId, category);
+            List<String> visitedPlaceIds = (request != null && request.getVisitedPlaceIds() != null) 
+                    ? request.getVisitedPlaceIds() 
+                    : new ArrayList<>();
+            DeckDTO deck = deckService.createDeck(userId, category, visitedPlaceIds);
             return ResponseEntity.status(HttpStatus.CREATED).body(deck);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
